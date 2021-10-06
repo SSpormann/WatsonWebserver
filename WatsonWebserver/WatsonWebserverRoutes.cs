@@ -87,18 +87,18 @@ namespace WatsonWebserver
         }
 
         /// <summary>
-        /// Routes for static controllers or non-static (controller based) controllers
+        /// Attribute routes for static controllers or non-static (controller based) controllers
         /// </summary>
-        public RouteManager Routes
+        public AttributeRouteManager Attribute
         {
             get
             {
-                return _Route;
+                return _Attribute;
             }
             set
             {
-                if (value == null) throw new ArgumentNullException(nameof(Routes));
-                _Route = value;
+                if (value == null) throw new ArgumentNullException(nameof(Attribute));
+                _Attribute = value;
             }
         }
 
@@ -157,7 +157,7 @@ namespace WatsonWebserver
         private ContentRouteManager _Content = new ContentRouteManager();
         private ContentRouteHandler _ContentHandler = null;
 
-        private RouteManager _Route = new RouteManager();
+        private AttributeRouteManager _Attribute = new AttributeRouteManager();
         private StaticRouteManager _Static = new StaticRouteManager();
         private ParameterRouteManager _Parameter = new ParameterRouteManager();
         private DynamicRouteManager _Dynamic = new DynamicRouteManager();

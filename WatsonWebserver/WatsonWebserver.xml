@@ -56,6 +56,163 @@
             Deny requests from any endpoint by default.
             </summary>
         </member>
+        <member name="T:WatsonWebserver.ApiControllerBase">
+            <summary>
+            Defines properties and methods for API controller.
+            </summary>
+        </member>
+        <member name="P:WatsonWebserver.ApiControllerBase.Context">
+            <summary>
+            HTTP context.
+            </summary>
+        </member>
+        <member name="M:WatsonWebserver.ApiControllerBase.#ctor">
+            <summary>
+            Instantiate.
+            </summary>
+        </member>
+        <member name="T:WatsonWebserver.ApiControllerMethodInfo">
+            <summary>
+            API controller method information.
+            </summary>
+        </member>
+        <member name="P:WatsonWebserver.ApiControllerMethodInfo.ContextField">
+            <summary>
+            Context.
+            </summary>
+        </member>
+        <member name="P:WatsonWebserver.ApiControllerMethodInfo.RoutePrefix">
+            <summary>
+            Route prefix.
+            </summary>
+        </member>
+        <member name="P:WatsonWebserver.ApiControllerMethodInfo.RouteName">
+            <summary>
+            Route name.
+            </summary>
+        </member>
+        <member name="P:WatsonWebserver.ApiControllerMethodInfo.QualifiedRouteName">
+            <summary>
+            Qualified route name, i.e. '[method] prefix/route'.
+            </summary>
+        </member>
+        <member name="P:WatsonWebserver.ApiControllerMethodInfo.ClassType">
+            <summary>
+            Class type.
+            </summary>
+        </member>
+        <member name="P:WatsonWebserver.ApiControllerMethodInfo.MethodInfo">
+            <summary>
+            Method info.
+            </summary>
+        </member>
+        <member name="P:WatsonWebserver.ApiControllerMethodInfo.HttpMethod">
+            <summary>
+            HTTP method.
+            </summary>
+        </member>
+        <member name="M:WatsonWebserver.ApiControllerMethodInfo.#ctor(WatsonWebserver.HttpMethod,System.String,System.String,System.Type,System.Reflection.MethodInfo)">
+            <summary>
+            Instantiate.
+            </summary>
+            <param name="httpMethod">HTTP method.</param>
+            <param name="routePrefix">Route prefix.</param>
+            <param name="routeName">Route name.</param>
+            <param name="classType">Class type.</param>
+            <param name="method">Method.</param>
+        </member>
+        <member name="M:WatsonWebserver.ApiControllerParameterInfo.GetDefaultValue">
+            <summary>
+            Get default value.
+            </summary>
+            <returns>Object.</returns>
+        </member>
+        <member name="T:WatsonWebserver.AttributeRouteAttribute">
+            <summary>
+            Attribute route attribute.
+            </summary>
+        </member>
+        <member name="P:WatsonWebserver.AttributeRouteAttribute.GUID">
+            <summary>
+            Globally-unique identifier.
+            </summary>
+        </member>
+        <member name="P:WatsonWebserver.AttributeRouteAttribute.Method">
+            <summary>
+            HTTP method.
+            </summary>
+        </member>
+        <member name="P:WatsonWebserver.AttributeRouteAttribute.Name">
+            <summary>
+            Method name.
+            </summary>
+        </member>
+        <member name="M:WatsonWebserver.AttributeRouteAttribute.#ctor">
+            <summary>
+            Instantiate.
+            </summary>
+        </member>
+        <member name="M:WatsonWebserver.AttributeRouteAttribute.#ctor(WatsonWebserver.HttpMethod,System.String)">
+            <summary>
+            Instantiate.
+            </summary>
+            <param name="method">Method.</param>
+            <param name="name">Method name.</param>
+        </member>
+        <member name="T:WatsonWebserver.AttributeRouteManager">
+            <summary>
+            Attribute route manager.  Attribute routes are used to invoke class or static methods for requests using specific HTTP methods to a matching path.
+            </summary>
+        </member>
+        <member name="M:WatsonWebserver.AttributeRouteManager.#ctor">
+            <summary>
+            Instantiate.
+            </summary>
+        </member>
+        <member name="M:WatsonWebserver.AttributeRouteManager.Add(System.String,System.String,System.Type,System.Reflection.MethodInfo,WatsonWebserver.HttpMethod)">
+            <summary>
+            Add a route.
+            </summary>
+            <param name="routePrefix">Route prefix.</param>
+            <param name="routeName">Method name.</param>
+            <param name="classType">Class type.</param>
+            <param name="classMethod">Class method.</param>
+            <param name="httpMethod">HTTP method.</param>
+        </member>
+        <member name="M:WatsonWebserver.AttributeRouteManager.Add(WatsonWebserver.ApiControllerMethodInfo)">
+            <summary>
+            Add a route.
+            </summary>
+            <param name="api">API controller method information.</param>
+        </member>
+        <member name="M:WatsonWebserver.AttributeRouteManager.Match(WatsonWebserver.HttpRequest)">
+            <summary>
+            Match a request to a handler.
+            </summary>
+            <param name="req">HTTP request.</param>
+            <returns>API controller method info.</returns>
+        </member>
+        <member name="T:WatsonWebserver.AttributeRoutePrefixAttribute">
+            <summary>
+            Annotates a controller with a route prefix that applies to all actions within the controller.
+            </summary>
+        </member>
+        <member name="P:WatsonWebserver.AttributeRoutePrefixAttribute.Prefix">
+            <summary>
+            Route prefix.
+            </summary>
+        </member>
+        <member name="M:WatsonWebserver.AttributeRoutePrefixAttribute.#ctor">
+            <summary>
+            Instantiate.
+            </summary>
+        </member>
+        <member name="M:WatsonWebserver.AttributeRoutePrefixAttribute.#ctor(System.String)">
+            <summary>
+            Instantiate.
+            </summary>
+            <param name="prefix">Route prefix.</param>
+        </member>
         <member name="T:WatsonWebserver.Chunk">
             <summary>
             A chunk of data, used when reading from a request where the Transfer-Encoding header includes 'chunked'.
@@ -1050,21 +1207,6 @@
             <param name="pr">Matching route.</param>
             <returns>True if match exists.</returns>
         </member>
-        <member name="F:WatsonWebserver.ApiControllerMethodInfo.ContextField">
-            <summary>
-            Controller class Context field
-            </summary>
-        </member>
-        <member name="T:WatsonWebserver.ApiControllerBase">
-            <summary>
-            Defines properties and methods for API controller.
-            </summary>
-        </member>
-        <member name="T:WatsonWebserver.RoutePrefixAttribute">
-            <summary>
-            Annotates a controller with a route prefix that applies to all actions within the controller.
-            </summary>
-        </member>
         <member name="T:WatsonWebserver.RequestEventArgs">
             <summary>
             Request event arguments.
@@ -1557,9 +1699,9 @@
             Static routes; i.e. routes with explicit matching and any HTTP method.
             </summary>
         </member>
-        <member name="P:WatsonWebserver.WatsonWebserverRoutes.Routes">
+        <member name="P:WatsonWebserver.WatsonWebserverRoutes.Attribute">
             <summary>
-            Routes for static controllers or non-static (controller based) controllers
+            Attribute routes for static controllers or non-static (controller based) controllers
             </summary>
         </member>
         <member name="P:WatsonWebserver.WatsonWebserverRoutes.Parameter">

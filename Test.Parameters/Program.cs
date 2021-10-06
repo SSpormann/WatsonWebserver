@@ -16,6 +16,11 @@ namespace Test.Parameters
         static void Main(string[] args)
         {
             _Server = new Server(_Hostname, _Port, false);
+            _Server.Settings.Debug.Routing = true;
+            _Server.Settings.Debug.Requests = true;
+            _Server.Settings.Debug.Responses = true;
+            _Server.Events.Logger = Console.WriteLine;
+            _Server.Events.ExceptionEncountered += Events_ExceptionEncountered;
             _Server.Start();
 
             StaticPostTest1();
@@ -37,6 +42,11 @@ namespace Test.Parameters
 
             Console.WriteLine("Press ENTER to exit");
             Console.ReadLine();
+        }
+
+        private static void Events_ExceptionEncountered(object sender, ExceptionEventArgs e)
+        {
+            Console.WriteLine(e.Json);
         }
 
         private static void NameGetTest1()

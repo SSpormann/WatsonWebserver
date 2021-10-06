@@ -262,9 +262,9 @@ namespace WatsonWebserver
 
         private void LoadRoutes()
         {
-            var routeClasses = _Assembly
+            var attrRoutePrefixes = _Assembly
                 .GetTypes()  // Get all classes from assembly
-                .Where(p => p.GetCustomAttributes().OfType<RoutePrefixAttribute>().Any()); // Only select classes (static or non-static) that have Route attribute
+                .Where(p => p.GetCustomAttributes().OfType<AttributeRoutePrefixAttribute>().Any()); // Only select classes (static or non-static) that have attribute route attributes
 
             var staticRoutes = _Assembly
                 .GetTypes() // Get all classes from assembly
@@ -291,24 +291,22 @@ namespace WatsonWebserver
                 }
             }
 
-            foreach (var cls in routeClasses)
+            foreach (var attrRoutePrefix in attrRoutePrefixes)
             {
-                var routePrefix = cls.GetCustomAttribute<RoutePrefixAttribute>().RoutePrefix;
-                foreach (var method in cls.GetMethods())
+                var routePrefix = attrRoutePrefix.GetCustomAttribute<AttributeRoutePrefixAttribute>().Prefix;
+                foreach (var methodInfo in attrRoutePrefix.GetMethods())
                 {
-                    var get = method.GetCustomAttribute<HttpGetAttribute>();
-                    if (get != null)
+                    var attrRoute  = methodInfo.GetCustomAttribute<AttributeRouteAttribute>();
+                    if (attrRoute != null)
                     {
-                        Events.Logger?.Invoke(_Header + $"adding GET route {cls.Name}.{get.MethodName ?? method.Name}");
-                        _Routes.Routes.AddRoute(routePrefix, get.MethodName ?? method.Name, cls, method, HttpMethod.GET);
-                    }
+                        string name = attrRoute.Name;
+                        if (String.IsNullOrEmpty(name)) name = methodInfo.Name;
 
-                    var post = method.GetCustomAttribute<HttpPostAttribute>();
-                    if (post != null)
-                    {
-                        Events.Logger?.Invoke(_Header + $"adding POST route {cls.Name}.{post.MethodName ?? method.Name}");
-                        _Routes.Routes.AddRoute(routePrefix, post.MethodName ?? method.Name, cls, method, HttpMethod.POST);
-                    }
+                        ApiControllerMethodInfo api = new ApiControllerMethodInfo(attrRoute.Method, routePrefix, name, attrRoutePrefix, methodInfo);
+
+                        Events.Logger?.Invoke(_Header + "adding attribute route " + attrRoute.Method.ToString() + " " + routePrefix + "/" + name);
+                        _Routes.Attribute.Add(api);
+                    } 
                 }
             }
 
@@ -497,20 +495,21 @@ namespace WatsonWebserver
 
                             #endregion
 
-                            #region Route
-                            var apiControllerMethod = _Routes.Routes.Match(ctx.Request);
+                            #region Attribute-Routes
+
+                            var apiControllerMethod = _Routes.Attribute.Match(ctx.Request);
                             if (apiControllerMethod != null)
                             {
                                 if (_Settings.Debug.Routing)
                                 {
                                     Events.Logger?.Invoke(
-                                        _Header + "route for " + ctx.Request.Source.IpAddress + ":" + ctx.Request.Source.Port + " " +
+                                        _Header + "attribute route for " + ctx.Request.Source.IpAddress + ":" + ctx.Request.Source.Port + " " +
                                         ctx.Request.Method.ToString() + " " + ctx.Request.Url.RawWithoutQuery);
                                 }
 
                                 ctx.RouteType = RouteTypeEnum.Route;
                                 ctx.Route = apiControllerMethod;
-                                await apiControllerMethod.Invoke(ctx).ConfigureAwait(false);
+                                await apiControllerMethod.Invoke(ctx, token).ConfigureAwait(false);
                                 return;
                             }
 

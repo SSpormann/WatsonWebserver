@@ -7,22 +7,22 @@ using WatsonWebserver;
 
 namespace Test.Parameters
 {
-    [RoutePrefix("MyStaticApi")]
+    [AttributeRoutePrefix("MyStaticApi")]
     public static class MyStaticApiController
     {
-        [HttpGet("GetTest1000")]  // HttpGet("GetTest1000") -> Rename GetTestNoNumber to GetTest1000
+        [AttributeRoute(HttpMethod.GET, "GetTest1000")]  // HttpGet("GetTest1000") -> Rename GetTestNoNumber to GetTest1000
         public static async Task<MyClass> GetTestNoNumber(int x, int y)
         {
             return new MyClass() { X = x * y };
         }
 
-        [HttpGet]
+        [AttributeRoute(HttpMethod.GET)]
         public static async Task<MyClass> GetTest1(int x, int y)
         {
             return new MyClass() { X = x * y };
         }
 
-        [HttpGet]
+        [AttributeRoute(HttpMethod.GET)]
         public static async Task<MyClass> GetTest2(HttpContext ctx, int x, int y)
         {
             return new MyClass()
@@ -32,13 +32,13 @@ namespace Test.Parameters
             };
         }
 
-        [HttpPost]
+        [AttributeRoute(HttpMethod.POST)]
         public static async Task<MyClass> PostTest1(MyClass mc)
         {
             return new MyClass() { X = mc.X * 2 };
         }
 
-        [HttpPost]
+        [AttributeRoute(HttpMethod.POST)]
         public static async Task<MyClass> PostTest2(HttpContext ctx, MyClass mc)
         {
             return new MyClass()
@@ -48,7 +48,7 @@ namespace Test.Parameters
             };
         }
 
-        [HttpPost]
+        [AttributeRoute(HttpMethod.POST)]
         public static async Task<MyClass> PostTest3(HttpContext ctx, MyClass mc, int multiplier)
         {
             return new MyClass()

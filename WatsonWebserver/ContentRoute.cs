@@ -59,7 +59,7 @@ namespace WatsonWebserver
             if (String.IsNullOrEmpty(path)) throw new ArgumentNullException(nameof(path));            
             Path = path.ToLower();
             IsDirectory = isDirectory;
-
+            if (IsDirectory) if (!Path.EndsWith("/")) Path += "/";
             if (!String.IsNullOrEmpty(guid)) GUID = guid;
             if (metadata != null) Metadata = metadata;
         }
