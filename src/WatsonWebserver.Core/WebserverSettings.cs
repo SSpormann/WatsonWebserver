@@ -177,7 +177,7 @@
             if (port < 0) throw new ArgumentOutOfRangeException(nameof(port));
 
             _Ssl.Enable = ssl;
-            _Hostname = hostname;
+            _Hostname = hostname == "::" ? "[::]" : hostname;
             _Port = port;
         }
 
